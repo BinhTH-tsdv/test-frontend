@@ -38,4 +38,4 @@ jobs:
       # Runs a scripts/hello_frontend.sh
       - name: Run a scripts/hello_frontend.sh
         run: |
-          ./hello_frontend.sh
+          ./scripts/hello_frontend.sh
