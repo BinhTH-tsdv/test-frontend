@@ -124,3 +124,38 @@ jobs:
           cd ./sw360
           mvn clean install --no-transfer-progress -P deploy -Dhelp-docs=true -Dbase.deploy.dir=. -Dliferay.deploy.dir=${PWD}/deploy -Dbackend.deploy.dir=${PWD}/deploy/webapps -Drest.deploy.dir=${PWD}/deploy/webapps -DRunComponentVisibilityRestrictionTest=false -DRunPrivateProjectAccessTest=false -DRunRestForceUpdateTest=false
           cd ../
+
+      - name: Run PrivateProjectAccessTest
+        run: |
+          cd ./sw360/build-configuration
+          mvn install
+          cd ..
+          cd libraries/datahandler
+          mvn test -Dtest=ProjectPermissionsVisibilityTest -DRunPrivateProjectAccessTest=true -DRunRestForceUpdateTest=true
+          cd ../../
+
+      - name: Run BulkReleaseDeletingTest
+        run: |
+          cd sw360/backend/src/src-components
+          mvn test -Dtest=BulkDeleteUtilTest -DRunPrivateProjectAccessTest=true -DRunBulkReleaseDeletingTest=true
+          cd ../
+
+      - name: Deploy Backend and Rest Server
+        run: |
+          cd ./sw360
+          sudo docker build -t sw360backendrest -f sw360BackendRest.Dockerfile .
+          sudo docker run -dt --network=host sw360backendrest
+          bash scripts/sw360BackendRestDockerConfig/scripts/checkDeploymentIsSuccess.sh
+          cd ../
+
+      - name: Create users and oauth client
+        run: |
+          cd ./sw360
+          bash scripts/sw360BackendRestDockerConfig/scripts/createUserAndOauthClient.sh
+          cd ../
+
+      - name: Run Client Integration Test for Rest Api
+        run: |
+          cd ./sw360/clients
+          mvn clean install --no-transfer-progress -DRunRestIntegrationTest=true
+          cd ../
