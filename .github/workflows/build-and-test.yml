@@ -39,3 +39,14 @@ jobs:
       - name: Run a scripts/hello_frontend.sh
         run: |
           ./scripts/hello_frontend.sh
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: 'true'
+          ssh-key: ${{ secrets.binhth2 }}
+
+      # Runs a script in submodules
+      - name: Runs a script in submodules
+        run: |
+          ./test-backend/scripts/hello.sh
