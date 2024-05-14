@@ -64,3 +64,7 @@ jobs:
           chmod +x ./.github/testForLicenseHeaders.sh
           bash ./.github/testForLicenseHeaders.sh
           cd ../
+      - name: Set environment variables
+        run: |
+          echo _JAVA_OPTIONS= '-Djdk.util.zip.disableZip64ExtraFieldValidation=true' >> $GITHUB_ENV
+          cat ./sw360/.versions >> $GITHUB_ENV
