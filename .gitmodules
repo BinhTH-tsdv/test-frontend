@@ -1,3 +1,6 @@
 [submodule "test-backend"]
 	path = test-backend
 	url = https://github.com/BinhTH-tsdv/test-backend.git
+[submodule "sw360"]
+	path = sw360
+	url = https://github.com/eclipse-sw360/sw360.git
