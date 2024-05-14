@@ -13,6 +13,12 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+permissions: write-all
+
+env:
+  COUCHDB_USER: admin
+  COUCHDB_PASSWORD: password
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -24,6 +30,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
+      # - uses: webiny/action-conventional-commits@v1.3.0
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
@@ -50,3 +57,10 @@ jobs:
       - name: Runs a script in submodules
         run: |
           ./test-backend/scripts/hello.sh
+
+      - name: Verify license headers
+        run: |
+          cd ./sw360
+          chmod +x ./.github/testForLicenseHeaders.sh
+          bash ./.github/testForLicenseHeaders.sh
+          cd ../
